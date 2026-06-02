@@ -1,0 +1,25 @@
+{
+  "case_id": "1104",
+  "base_dir": "/v/ai/nobackup/cni/chang_data/1211_reg1104",
+  "scans": {
+    "s1": {
+      "name": "s1",
+      "mat_file": "paravascular_adc_v2.mat",
+      "output_folder": "/v/ai/nobackup/cni/chang_data/1211_reg1104/output_s1/results/step2_multilabel/layout_preview",
+      "segments_of_interest": [
+        {
+          "seg_id": "EP_01 — EP_02",
+          "name": "M2_R",
+          "trim_start": 3,
+          "trim_end": 3
+        },
+        {
+          "seg_id": "EP_04 — EP_06",
+          "name": "M1_R",
+          "trim_start": 3,
+          "trim_end": 3
+        }
+      ]
+    }
+  }
+}
