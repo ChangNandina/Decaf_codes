@@ -1,6 +1,6 @@
 # DECAF Pipeline — Cerebrovascular Pulsatility & Glymphatic Analysis
 
-Analysis pipeline for noninvasive MRI quantification of cerebral arterial pulsatility and paravascular CSF dynamics using diffusion-prepared bSSFP cine MRI (DECAF sequence).
+Analysis pipeline for noninvasive MRI quantification of intracranial arterial pulsatility and paravascular CSF dynamics using diffusion-prepared bSSFP cine MRI (DECAF sequence).
 
 ## Overview
 
