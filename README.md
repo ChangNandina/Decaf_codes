@@ -127,11 +127,9 @@ cd step4_matlabpart
 - `case_config_{id}.json` — vessel annotation config (from config editor)
 
 ## References
-
-- Yuan C, et al. Diffusion-prepared bSSFP cine MRI for noninvasive quantification of glymphatic function.
-- DECAF: Diffusion-Encoded Cardiac-gated Assessment of Flow
+- DECAF: Diffusion-Prepared Cine bSSFP https://onlinelibrary.wiley.com/doi/epdf/10.1002/mrm.70381
 
 ## Author
 
-Chang Ni (Nerissa) — University of Utah, Biomedical Engineering  
-PI: Chun Yuan, Radiology Research
+Chang Ni (Nerissa) — Biomedical Engineering, University of Utah
+PI: Xiaodong Ma, Chun Yuan, Radiology and Imaging Sciences, University of Utah
