@@ -71,22 +71,24 @@ cd step1_dicom2nifti
 # Edit CONFIG in run_step1.py (subject ID, DICOM paths)
 python run_step1.py
 
-# [External] Run FSL FAST on 480 downsampled data
+
 
 # Step 2: ADC
+# [External] Run FSL BET, FAST on 480 downsampled data, Run BET on 960 data for brain contour
 cd step2_ADCcalculation
 # Edit CONFIG in run_step2.py
 python run_step2.py           # Stage A: upsample + CSF seg + QC
 # Review QC image, then set RUN_ADC=True
 python run_step2.py           # Stage B: ADC calculation
 
-# [External] Draw vessel mask in ITK-SNAP (p1_m.nii.gz)
-# [External] Start nnInteractive server (localhost:8912)
 
 # Step 3: Vessel analysis
+# [External] Start nnInteractive server (localhost:8912)
+# [External] Draw vessel mask in ITK-SNAP with nninteractive tool(save as p1_m.nii.gz)
+
 cd step3_itksnapvessel
 # Edit CONFIG in run_step3.py
-python run_step3.py           # Part A: skeleton + phase 1
+python run_step3.py           # Part A: skeleton + phase 1, see if DICE is reasonable(>0.8)
 # Review in ITK-SNAP, set SKIP_SEGMENTS
 python run_step3.py           # Part B: all phases
 python run_step3.py           # Build graph + area/PI + export
@@ -95,7 +97,7 @@ python run_step3.py           # Build graph + area/PI + export
 cd step4_matlabpart
 # Open vessel_config_editor.html, select segments, save JSON
 # A matlab config file and json file are provided for your reference
-# Run plot_curve_save.m in MATLAB
+# Run plot_curve_save.m in MATLAB, output curve figures and mat file for PI/ADC data summary
 ```
 
 ## Dependencies
@@ -107,9 +109,9 @@ cd step4_matlabpart
 - scikit-image (skeletonize, marching cubes)
 
 **External tools:**
-- FSL FAST (brain/CSF segmentation)
+- FSL BET, FAST (brain/CSF segmentation)
 - ITK-SNAP + nnInteractive (vessel labeling)
-- MATLAB R2016b+ (visualization, jsondecode)
+- MATLAB R2022b (visualization, jsondecode)
 
 **MRI acquisition:**
 - Siemens scanner (XA30)
@@ -123,7 +125,7 @@ cd step4_matlabpart
 - `b0.nii.gz` — b=0 reference volume
 - `p{nn}_binary.nii.gz` / `p{nn}_multilabel.nii.gz` — vessel segmentation masks
 - `adc_corrected_csf_phase{nn}_single.mat` — corrected ADC with CSF mask
-- `paravascular_adc_v2.mat` — final combined vessel area + CSF ADC data
+- `paravascular_adc.mat` — final combined vessel area + CSF ADC data
 - `case_config_{id}.json` — vessel annotation config (from config editor)
 
 ## References
