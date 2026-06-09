@@ -22,9 +22,9 @@ Decaf_codes/
 | Sub-step | Function | Description |
 |----------|----------|-------------|
 | 1a | `convert_dicom_to_nifti.py` | b40 phases (25×) + b0 DICOM → NIfTI (960³) |
-| 1b | `downsample.py` | 960³ → 480³ (for FSL FAST input) |
-| 1c | `crop.py` | Center-crop to 480³ cube (for ITK-SNAP labeling) |
-| 1d | `register.py` | Rigid registration of scan 2 → scan 1 (for reproducibility) |
+| 1b | `register.py` | Rigid registration of scan 2 → scan 1 (for reproducibility) |
+| 1c | `downsample.py` | 960³ → 480³ (for FSL FAST input) |
+| 1d | `crop.py` | Center-crop to 480³ cube (for ITK-SNAP labeling) |
 
 ### Step 2: ADC calculation
 **`run_step2.py`** — CSF segmentation and ADC map generation (run in two stages)
