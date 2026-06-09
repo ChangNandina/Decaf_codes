@@ -20,11 +20,13 @@ def _read(path):
 def _rigid_register(fixed, moving):
     fixed_f  = sitk.Cast(fixed,  sitk.sitkFloat32)
     moving_f = sitk.Cast(moving, sitk.sitkFloat32)
+
     initial  = sitk.CenteredTransformInitializer(
         fixed_f, moving_f,
         sitk.Euler3DTransform(),
         sitk.CenteredTransformInitializerFilter.GEOMETRY,
     )
+
     reg = sitk.ImageRegistrationMethod()
     reg.SetMetricAsMattesMutualInformation(numberOfHistogramBins=64)
     reg.SetMetricSamplingStrategy(reg.RANDOM)
@@ -61,6 +63,7 @@ def _apply_to_files(file_list, fixed, transform, out_dir, label):
 
 def register_interscan(ref_dir, src_dir):
     """Rigid registration of src_dir scan to ref_dir scan.
+
     Transform is estimated from phase1, then applied to all phases and b0.
 
     Args:
@@ -84,6 +87,7 @@ def register_interscan(ref_dir, src_dir):
     fixed     = _read(ref_path)
     moving    = _read(mov_path)
     transform = _rigid_register(fixed, moving)
+
     sitk.WriteTransform(transform, transform_path)
     print(f"  Transform saved: {transform_path}")
 
