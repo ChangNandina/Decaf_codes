@@ -24,14 +24,14 @@ import os
 # CONFIG — only change this section for each subject
 # ============================================================
 
-SUBJECT_ID = "250701"
+SUBJECT_ID = "250408"
 BASE_DIR   = f"/v/ai/nobackup/cni/chang_data/{SUBJECT_ID}_960"
 N_PHASES   = 25
 
 # --- Step 2a: Upsample FSL FAST outputs ---
-FSL_PVE0_480_PATH  = os.path.join(BASE_DIR, "phase1_480_brain_pve_0.nii.gz")
+FSL_PVE0_480_PATH  = os.path.join(BASE_DIR, "phase1_480_brain_pve_this.nii.gz")
 FSL_PVE0_960_PATH  = os.path.join(BASE_DIR, "phase1_brain_pve_960.nii.gz")
-FSL_BRAIN_480_PATH = os.path.join(BASE_DIR, "phase1_480_brain.nii.gz")
+# FSL_BRAIN_480_PATH = os.path.join(BASE_DIR, "phase1_480_brain.nii.gz")
 FSL_BRAIN_960_PATH = os.path.join(BASE_DIR, "phase1_brain.nii.gz")
 UPSAMPLE_METHOD    = "nearest"
 
@@ -52,8 +52,8 @@ ADC_OUTPUT_DIR    = os.path.join(BASE_DIR, f"adc_corrected_maps_{SUBJECT_ID}")
 ADC_MODE          = "dicom"   # 'dicom' or 'nifti'
 
 # DICOM mode
-B0_DICOM_DIR       = "/v/ai/nobackup/xma/Trufi_BBCine_results/Dicom_New_960_all/20250701_human_dwtrufi_old2/meas_MID00033_FID136887_trufi_b40_Kooshball_Nphs25_NCha32_retrogate_b0_cgsense/dicom_bbcine_combined"
-B40_DICOM_BASE_DIR = "/v/ai/nobackup/xma/Trufi_BBCine_results/Dicom_New_960_all/20250701_human_dwtrufi_old2/meas_MID00033_FID136887_trufi_b40_Kooshball_Nphs25_NCha32_retrogate_l1_ttv_grasp_kwic_Nrings5_TV0.001_TTV0.01"
+B0_DICOM_DIR       = "/v/ai/nobackup/xma/Trufi_BBCine_results/Dicom_New_960_all/20250408_DWTrufi_human_2/meas_MID00178_FID119945_trufi_b40_Kooshball_Nphs25_NCha32_retrogate_b0_cgsense"
+B40_DICOM_BASE_DIR = "/v/ai/nobackup/xma/Trufi_BBCine_results/Dicom_New_960_all/20250408_DWTrufi_human_2/meas_MID00178_FID119945_trufi_b40_Kooshball_Nphs25_NCha32_retrogate_l1_ttv_grasp_kwic_Nrings5_TV0.001_TTV0.01"
 
 # NIfTI mode (used when ADC_MODE = 'nifti')
 B0_NIFTI_PATH      = os.path.join(BASE_DIR, "nifti_960_s2_sitk_rigid", "r_b0.nii.gz")
@@ -63,10 +63,15 @@ B40_NIFTI_TEMPLATE = "r_phase{phase}.nii.gz"
 ADC_PARAMS = dict(d=22, TEp=52, TR=240, segment=32, TE=2.79, fs=16, b=40)
 
 # --- Select steps ---
-RUN_UPSAMPLE = True
-RUN_CSF_SEG  = True
-RUN_CSF_MASK = True   # morphological opening + QC image
-RUN_ADC      = False  # set True after reviewing QC image
+# RUN_UPSAMPLE = True
+# RUN_CSF_SEG  = True
+# RUN_CSF_MASK = True   # morphological opening + QC image
+# RUN_ADC      = False  # set True after reviewing QC image
+
+RUN_UPSAMPLE = False
+RUN_CSF_SEG  = False
+RUN_CSF_MASK = False   # morphological opening + QC image
+RUN_ADC      = True  # set True after reviewing QC image
 
 # ============================================================
 
@@ -78,7 +83,7 @@ print("=" * 60)
 if RUN_UPSAMPLE:
     print("\n[Step 2a] Upsample FSL outputs 480 -> 960")
     upsample_to_960(FSL_PVE0_480_PATH,  FSL_PVE0_960_PATH,  method=UPSAMPLE_METHOD)
-    upsample_to_960(FSL_BRAIN_480_PATH, FSL_BRAIN_960_PATH, method=UPSAMPLE_METHOD)
+    # upsample_to_960(FSL_BRAIN_480_PATH, FSL_BRAIN_960_PATH, method=UPSAMPLE_METHOD)
 
 # Step 2b
 if RUN_CSF_SEG:

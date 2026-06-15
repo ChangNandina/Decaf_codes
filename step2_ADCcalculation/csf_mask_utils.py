@@ -47,14 +47,14 @@ def generate_csf_mask(interseg_path, output_nifti_path, opening_iterations=1):
 
 
 def generate_overlay_qc(brain_path, mask_path, output_png_path,
-                         n_slices=7, alpha=0.4):
+                         n_slices=12, alpha=0.4):
     """Generate a three-plane QC figure: brain + CSF mask overlay.
 
     Args:
         brain_path      : path to skull-stripped brain .nii.gz (960^3)
         mask_path       : path to csfmask .nii.gz
         output_png_path : where to save the QC PNG
-        n_slices        : number of evenly-spaced slices per plane (default 7)
+        n_slices        : number of evenly-spaced slices per plane (default 12)
         alpha           : mask overlay transparency (default 0.4)
     """
     print(f"[generate_overlay_qc]")
@@ -68,9 +68,9 @@ def generate_overlay_qc(brain_path, mask_path, output_png_path,
     p2, p98 = np.percentile(brain[brain > 0], [2, 98])
     brain_norm = np.clip((brain - p2) / (p98 - p2 + 1e-8), 0, 1)
 
-    # Pick evenly spaced slices around the center for each plane
+    # Pick evenly spaced slices concentrated around the center
     def get_slices(size, n):
-        margin = size // 6
+        margin = size // 4          # tighter margin -> more middle slices
         return np.linspace(margin, size - margin, n, dtype=int)
 
     sx = get_slices(brain.shape[0], n_slices)
@@ -94,9 +94,9 @@ def generate_overlay_qc(brain_path, mask_path, output_png_path,
             # Brain underlay
             ax.imshow(np.rot90(b_slice), cmap='gray', vmin=0, vmax=1)
 
-            # Mask overlay in cyan
+            # Mask overlay in red
             overlay = np.zeros((*b_slice.shape, 4))
-            overlay[m_slice] = [0, 1, 1, alpha]   # RGBA cyan
+            overlay[m_slice] = [1, 0, 0, alpha]   # RGBA red
             ax.imshow(np.rot90(overlay))
 
             ax.axis('off')
@@ -105,7 +105,7 @@ def generate_overlay_qc(brain_path, mask_path, output_png_path,
             if row == 0:
                 ax.set_title(f"sl={sl}", color='white', fontsize=8)
 
-    fig.suptitle("CSF Mask QC — cyan overlay on brain\n"
+    fig.suptitle("CSF Mask QC — red overlay on brain\n"
                  f"(brain: {os.path.basename(brain_path)}  "
                  f"mask: {os.path.basename(mask_path)})",
                  color='white', fontsize=11)
@@ -118,19 +118,33 @@ def generate_overlay_qc(brain_path, mask_path, output_png_path,
     print(f"  QC image saved: {output_png_path}")
 
 
+# def save_nifti_to_mat(nifti_path, mat_path):
+#     """Call MATLAB (server) to convert csfmask.nii.gz to .mat (v7.3)."""
+#     import subprocess
+#     matlab_cmd = (
+#         f"data = niftiread('{nifti_path}'); "
+#         f"save('{mat_path}', 'data', '-v7.3');"
+#     )
+#     print(f"[save_nifti_to_mat] Running MATLAB...")
+#     result = subprocess.run(
+#         ["matlab", "-nodisplay", "-nosplash", "-r", f"{matlab_cmd} exit"],
+#         capture_output=True, text=True, timeout=180
+#     )
+#     if result.returncode != 0:
+#         print(f"  MATLAB stderr:\n{result.stderr}")
+#         raise RuntimeError("MATLAB conversion failed")
+#     print(f"  Saved: {os.path.basename(mat_path)}")
 def save_nifti_to_mat(nifti_path, mat_path):
-    """Call MATLAB (server) to convert csfmask.nii.gz to .mat (v7.3)."""
-    import subprocess
-    matlab_cmd = (
-        f"data = niftiread('{nifti_path}'); "
-        f"save('{mat_path}', 'data', '-v7.3');"
-    )
-    print(f"[save_nifti_to_mat] Running MATLAB...")
-    result = subprocess.run(
-        ["matlab", "-nodisplay", "-nosplash", "-r", f"{matlab_cmd} exit"],
-        capture_output=True, text=True, timeout=180
-    )
-    if result.returncode != 0:
-        print(f"  MATLAB stderr:\n{result.stderr}")
-        raise RuntimeError("MATLAB conversion failed")
+    """Convert csfmask.nii.gz to .mat (v7.3 / HDF5) using Python."""
+    import nibabel as nib
+    import h5py
+    import numpy as np
+
+    print(f"[save_nifti_to_mat] Python mode")
+    data = np.asarray(nib.load(nifti_path).dataobj)
+
+    os.makedirs(os.path.dirname(mat_path), exist_ok=True)
+    with h5py.File(mat_path, 'w') as f:
+        f.create_dataset('data', data=data.T)   # .T for MATLAB column-major order
+
     print(f"  Saved: {os.path.basename(mat_path)}")

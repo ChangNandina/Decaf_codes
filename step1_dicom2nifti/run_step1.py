@@ -19,13 +19,13 @@ import os
 # ============================================================
 # CONFIG
 # ============================================================
-SUBJECT_ID  = "250403"                        # 用于命名输出文件夹
+SUBJECT_ID  = "250408"                        # 用于命名输出文件夹
 BASE_OUT    = "/v/ai/nobackup/cni/chang_data" # 输出根目录
 N_PHASES    = 25
 
 # --- Scan 1 ---
-B40_DICOM_DIR_S1 = "/v/ai/nobackup/xma/Trufi_BBCine_results/Dicom_New_960_all/20250403_DWTrufi_human_1/meas_MID00351_FID118900_trufi_b40_Kooshball_Nphs25_NCha32_retrogate_l1_ttv_grasp_kwic_Nrings5_TV0.001_TTV0.01"
-B0_DICOM_DIR_S1  = "/v/ai/nobackup/xma/Trufi_BBCine_results/Dicom_New_960_all/20250403_DWTrufi_human_1/meas_MID00351_FID118900_trufi_b40_Kooshball_Nphs25_NCha32_retrogate_b0_cgsense"     # 填路径或保持 None
+B40_DICOM_DIR_S1 = "/v/ai/nobackup/xma/Trufi_BBCine_results/Dicom_New_960_all/20250408_DWTrufi_human_2/meas_MID00178_FID119945_trufi_b40_Kooshball_Nphs25_NCha32_retrogate_l1_ttv_grasp_kwic_Nrings5_TV0.001_TTV0.01"
+B0_DICOM_DIR_S1  = "/v/ai/nobackup/xma/Trufi_BBCine_results/Dicom_New_960_all/20250408_DWTrufi_human_2/meas_MID00178_FID119945_trufi_b40_Kooshball_Nphs25_NCha32_retrogate_b0_cgsense"     # 填路径或保持 None
 B0_SUBDIR_S1     = "dicom_bbcine_combined"
 
 # --- Scan 2 (第二次扫描，没有就保持 None) ---

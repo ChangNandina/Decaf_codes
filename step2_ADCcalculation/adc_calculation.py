@@ -158,7 +158,8 @@ def calculate_adc(
     if mode == 'nifti':
         b0 = _load_nifti(b0_nifti_path)
     else:
-        b0 = _load_dicom_volume(b0_dicom_dir, image_size)
+        b0 = _load_dicom_volume(os.path.join(b0_dicom_dir, "dicom_bbcine_combined"), image_size)
+        # b0 = _load_dicom_volume(b0_dicom_dir, image_size)
     _save_slice(b0, os.path.join(qc_dir, 'b0_image.png'), 'b=0')
 
     # Correction constants
