@@ -226,7 +226,7 @@ def export_with_csf(step1_dir, step2_dir, vessel_dir, adc_folder, crop_dir,
                 for ph in range(1, n_phases+1)]
     adc_out  = np.full((N_total, n_phases), np.nan, dtype=np.float32)
     nvox_out = np.zeros((N_total, n_phases), dtype=np.int32)
-    ctx = get_context('spawn')
+    ctx = get_context('fork')
     with ctx.Pool(processes=n_workers) as pool:
         for ph, adc_col, nvox_col in pool.imap_unordered(_process_phase_adc, job_args):
             adc_out[:,ph-1]=adc_col; nvox_out[:,ph-1]=nvox_col

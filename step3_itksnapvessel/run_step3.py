@@ -24,6 +24,8 @@ Environment requirements:
   - nnInteractive server must be running (green light in ITK-SNAP plugin)
   - Start server at: http://localhost:8912 before running Part A or B
 """
+import multiprocessing
+multiprocessing.set_start_method('fork', force=True)
 
 from planb_inference import run_part_a, run_part_b
 from build_graph import build_graph
@@ -31,16 +33,17 @@ from area_pi import compute_area_pi
 from export_results import export_vessel_only, export_with_csf
 import os
 
+
 # ============================================================
 # CONFIG — only change this section for each subject
 # ============================================================
 
-SUBJECT_ID = "250701"
+SUBJECT_ID = "250403"
 BASE_DIR   = f"/v/ai/nobackup/cni/chang_data/{SUBJECT_ID}_960"
 N_PHASES   = 25
 
 # Input: cropped 480^3 NIfTI phases (from step1 crop output)
-NIFTI_DIR  = os.path.join(BASE_DIR, "crop480_s1")
+NIFTI_DIR  = os.path.join(BASE_DIR, f"crop480_{SUBJECT_ID}")
 
 # Phase 1 vessel mask (manually drawn in ITK-SNAP before step3)
 MASK_PATH  = os.path.join(NIFTI_DIR, "p1_m.nii.gz")
@@ -61,7 +64,7 @@ BBOX_PAD          = 80
 
 # SKIP_SEGMENTS: fill after reviewing Part A results in ITK-SNAP
 # Check skeleton_segments.nii.gz and p01_multilabel.nii.gz
-SKIP_SEGMENTS = []   # e.g. [9, 10, 11, 16]
+SKIP_SEGMENTS = [10,18]   # e.g. [9, 10, 11, 16] 0403:[10,18]
 
 # --- Graph building ---
 BIF_CLUSTER_RADIUS = 3
@@ -86,7 +89,7 @@ XSEC_RESOLUTION     = 0.2
 XSEC_PHASE          = 1
 
 # --- CSF ADC (only used when HAS_CSF=True) ---
-HAS_CSF          = False   # set True if ADC maps available from step2
+HAS_CSF          = True   # set True if ADC maps available from step2
 ADC_FOLDER       = os.path.join(BASE_DIR, f"adc_corrected_maps_{SUBJECT_ID}")
 CROP_DIR         = NIFTI_DIR   # folder with crop_info.json
 N_WORKERS_ADC    = 6
@@ -99,11 +102,23 @@ OUT_MAT_VESSEL   = os.path.join(STEP2_DIR, f"vessel_pi_{SUBJECT_ID}.mat")
 OUT_MAT_COMBINED = os.path.join(STEP2_DIR, f"vessel_csf_{SUBJECT_ID}.mat")
 
 # --- Select steps ---
-RUN_PART_A      = True    # Part A: skeleton + phase1 inference
-RUN_PART_B      = False   # Part B: batch all phases (after reviewing Part A)
-RUN_BUILD_GRAPH = False   # Build vessel graph + 3D HTML
-RUN_AREA_PI     = False   # Cross-section area + PI
-RUN_EXPORT      = False   # Export .mat
+# RUN_PART_A      = True    # Part A: skeleton + phase1 inference
+# RUN_PART_B      = False   # Part B: batch all phases (after reviewing Part A)
+# RUN_BUILD_GRAPH = False   # Build vessel graph + 3D HTML
+# RUN_AREA_PI     = False   # Cross-section area + PI
+# RUN_EXPORT      = False   # Export .mat
+
+# RUN_PART_A      = False    # Part A: skeleton + phase1 inference
+# RUN_PART_B      = True   # Part B: batch all phases (after reviewing Part A)
+# RUN_BUILD_GRAPH = True   # Build vessel graph + 3D HTML
+# RUN_AREA_PI     = True   # Cross-section area + PI
+# RUN_EXPORT      = True   # Export .mat
+
+RUN_PART_A      = False
+RUN_PART_B      = False
+RUN_BUILD_GRAPH = False
+RUN_AREA_PI     = False
+RUN_EXPORT      = True
 
 # ============================================================
 
